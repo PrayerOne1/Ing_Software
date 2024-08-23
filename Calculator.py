@@ -1,4 +1,5 @@
 import tkinter as tk
+from math import factorial
 
 # Crear la ventana de la calculadora
 root = tk.Tk()
@@ -21,6 +22,17 @@ def calculate():
         equation.set(result)
         expression = result
     except:
+        equation.set("Syntax Error")
+        expression = ""
+
+# Función para calcular el factorial
+def calculate_factorial():
+    global expression
+    try:
+        result = str(factorial(int(expression)))
+        equation.set(result)
+        expression = result
+    except:
         equation.set("Error")
         expression = ""
 
@@ -35,7 +47,7 @@ equation = tk.StringVar()
 screen = tk.Entry(root, textvariable=equation, font=('Arial', 20), bd=10, insertwidth=2, width=20, borderwidth=4)
 screen.grid(row=0, column=0, columnspan=5)
 
-# Crear labels para conversiones de numeros
+# Crear labels para conversiones de números
 label_hex = tk.Label(root, font=('Arial', 14), text='Hex:')
 label_dec = tk.Label(root, font=('Arial', 14), text='Dec:')
 label_oct = tk.Label(root, font=('Arial', 14), text='Oct:')
@@ -76,7 +88,7 @@ btn_div = tk.Button(root, text='/', padx=20, pady=20, font=('Arial', 18), comman
 btn_log = tk.Button(root, text='log', padx=20, pady=20, font=('Arial', 18))
 btn_por = tk.Button(root, text='%', padx=20, pady=20, font=('Arial', 18))
 btn_raiz = tk.Button(root, text='√', padx=20, pady=20, font=('Arial', 18))
-btn_fact = tk.Button(root, text='n!', padx=20, pady=20, font=('Arial', 18))
+btn_fact = tk.Button(root, text='n!', padx=20, pady=20, font=('Arial', 18), command=calculate_factorial)
 btn_arri = tk.Button(root, text='^', padx=20, pady=20, font=('Arial', 18))
 btn_back = tk.Button(root, text='←', padx=20, pady=20, font=('Arial', 18))
 btn_abs = tk.Button(root, text='ABS', padx=20, pady=20, font=('Arial', 18))
