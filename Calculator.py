@@ -1,5 +1,5 @@
 import tkinter as tk
-from math import factorial
+import math
 
 # Crear la ventana de la calculadora
 root = tk.Tk()
@@ -25,11 +25,67 @@ def calculate():
         equation.set("Syntax Error")
         expression = ""
 
-# Función para calcular el factorial
+# Función para calcular el factorial sin usar la librería math
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
 def calculate_factorial():
     global expression
     try:
-        result = str(factorial(int(expression)))
+        num = int(expression)
+        result = str(factorial(num))
+        equation.set(result)
+        expression = result
+    except:
+        equation.set("Error")
+        expression = ""
+
+# Función para calcular el porcentaje
+def calculate_percentage():
+    global expression
+    try:
+        result = str(eval(expression) / 100)
+        equation.set(result)
+        expression = result
+    except:
+        equation.set("Error")
+        expression = ""
+
+# Función para calcular el exponente sin usar math.pow
+def calculate_exponent():
+    global expression
+    try:
+        # Reemplazar el operador '^' por '**' en la expresión
+        if '^' in expression:
+            base, exponent = map(int, expression.split('^'))
+            result = str(base ** exponent)
+        else:
+            result = str(eval(expression))
+        equation.set(result)
+        expression = result
+    except:
+        equation.set("Error")
+        expression = ""
+
+# Función para calcular la raíz cuadrada usando math
+def calculate_sqrt():
+    global expression
+    try:
+        result = str(math.sqrt(float(expression)))
+        equation.set(result)
+        expression = result
+    except:
+        equation.set("Error")
+        expression = ""
+
+# Función para calcular el valor absoluto usando math
+def calculate_abs():
+    global expression
+    try:
+        result = str(abs(float(expression)))
         equation.set(result)
         expression = result
     except:
@@ -86,12 +142,12 @@ btn_div = tk.Button(root, text='/', padx=20, pady=20, font=('Arial', 18), comman
 
 # Botones para funciones científicas
 btn_log = tk.Button(root, text='log', padx=20, pady=20, font=('Arial', 18))
-btn_por = tk.Button(root, text='%', padx=20, pady=20, font=('Arial', 18))
-btn_raiz = tk.Button(root, text='√', padx=20, pady=20, font=('Arial', 18))
+btn_por = tk.Button(root, text='%', padx=20, pady=20, font=('Arial', 18), command=calculate_percentage)
+btn_raiz = tk.Button(root, text='√', padx=20, pady=20, font=('Arial', 18), command=calculate_sqrt)
 btn_fact = tk.Button(root, text='n!', padx=20, pady=20, font=('Arial', 18), command=calculate_factorial)
-btn_arri = tk.Button(root, text='^', padx=20, pady=20, font=('Arial', 18))
+btn_arri = tk.Button(root, text='^', padx=20, pady=20, font=('Arial', 18), command=lambda: press_button('**'))
 btn_back = tk.Button(root, text='←', padx=20, pady=20, font=('Arial', 18))
-btn_abs = tk.Button(root, text='ABS', padx=20, pady=20, font=('Arial', 18))
+btn_abs = tk.Button(root, text='ABS', padx=20, pady=20, font=('Arial', 18), command=calculate_abs)
 btn_deci = tk.Button(root, text='.', padx=20, pady=20, font=('Arial', 18))
 
 btn_equal = tk.Button(root, text='=', padx=20, pady=20, font=('Arial', 18), command=calculate)
@@ -140,5 +196,5 @@ btn0.grid(row=10, column=2)
 btn_deci.grid(row=10, column=3)
 btn_equal.grid(row=10, column=4)
 
-# Ejecutar el loop principal de la GUI
+# Iniciar el bucle principal de la aplicación
 root.mainloop()
