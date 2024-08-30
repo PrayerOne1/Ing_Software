@@ -57,8 +57,28 @@ def edit():
     btnEliminar['state'] = tk.DISABLED
     btnSalvar['state'] = tk.NORMAL
     btnCancelar['state'] = tk.NORMAL
-    
-
+    id = txId.get()
+    titulo = txTitulo.get()
+    autor = txAutor.get()
+    editorial = txEditorial.get()
+    clasificacion = cbClasificacion.get()
+    with open(archivo_datos, 'a') as archivo:
+        #   Tries to delete the data
+        if id == txId:
+            delete()
+            lineas = "libros.txt".readlines()
+        #   Try to overwrite the data
+        if id and titulo and autor and editorial and clasificacion:
+            try:
+                with open(archivo_datos, 'a') as archivo:
+                    delete()
+                    archivo.write(f'{id},{titulo},{autor},{editorial},{clasificacion}\n')
+                messagebox.showinfo('Éxito', 'Datos actualizados correctamente.')
+                cancel()
+            except Exception as e:
+                messagebox.showerror('Error', f'Error al actualizar datos: {e}')
+        else:
+            messagebox.showerror('Error', 'Rellene los campos faltantes')
 
 def delete():
     id_to_delete = searchEntry.get()
