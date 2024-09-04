@@ -7,12 +7,14 @@ root.title("Calculadora")
 
 # Variable para almacenar la expresión matemática
 expression = ""
+current_mode = "Dec"  # Modo inicial de conversión
 
 # Función para agregar números y operadores a la expresión
 def press_button(value):
     global expression
     expression += str(value)
     equation.set(expression)
+    update_conversions()
 
 # Función para evaluar la expresión
 def calculate():
@@ -21,6 +23,7 @@ def calculate():
         result = str(eval(expression))
         equation.set(result)
         expression = result
+        update_conversions()
     except:
         equation.set("Syntax Error")
         expression = ""
@@ -39,6 +42,7 @@ def calculate_factorial():
         result = str(factorial(num))
         equation.set(result)
         expression = result
+        update_conversions()
     except:
         equation.set("Error")
         expression = ""
@@ -54,6 +58,12 @@ def calculate_percentage():
         equation.set("Error")
         expression = ""
 
+def backspace():
+    global expression
+    # Eliminar el último carácter de la expresión
+    expression = expression[:-1]
+    equation.set(expression)
+
 # Función para calcular el exponente sin usar math.pow
 def calculate_exponent():
     global expression
@@ -66,6 +76,7 @@ def calculate_exponent():
             result = str(eval(expression))
         equation.set(result)
         expression = result
+        update_conversions()
     except:
         equation.set("Error")
         expression = ""
@@ -77,6 +88,7 @@ def calculate_sqrt():
         result = str(math.sqrt(float(expression)))
         equation.set(result)
         expression = result
+        update_conversions()
     except:
         equation.set("Error")
         expression = ""
@@ -88,6 +100,7 @@ def calculate_abs():
         result = str(abs(float(expression)))
         equation.set(result)
         expression = result
+        update_conversions()
     except:
         equation.set("Error")
         expression = ""
@@ -97,6 +110,30 @@ def clear():
     global expression
     expression = ""
     equation.set("")
+    update_conversions()
+
+# Función para actualizar las conversiones en los labels
+def update_conversions():
+    global expression
+    try:
+        num = int(expression)
+        label_hex.config(text=f'Hex: {hex(num)[2:].upper()}')
+        label_dec.config(text=f'Dec: {num}')
+        label_oct.config(text=f'Oct: {oct(num)[2:]}')
+        label_bin.config(text=f'Bin: {bin(num)[2:]}')
+    except:
+        label_hex.config(text='Hex:')
+        label_dec.config(text='Dec:')
+        label_oct.config(text='Oct:')
+        label_bin.config(text='Bin:')
+
+# Función para cambiar entre los modos de conversión
+def change_mode():
+    global current_mode
+    modes = ['Dec', 'Hex', 'Oct', 'Bin']
+    current_index = modes.index(current_mode)
+    current_mode = modes[(current_index + 1) % len(modes)]
+    mode_button.config(text=f'Modo: {current_mode}')
 
 # Crear la pantalla de la calculadora
 equation = tk.StringVar()
@@ -113,6 +150,10 @@ label_hex.grid(row=1, column=0, sticky='e')
 label_dec.grid(row=2, column=0, sticky='e')
 label_oct.grid(row=3, column=0, sticky='e')
 label_bin.grid(row=4, column=0, sticky='e')
+
+# Botón para cambiar el modo de conversión
+mode_button = tk.Button(root, text=f'Modo: {current_mode}', font=('Arial', 14), command=change_mode)
+mode_button.grid(row=1, column=1, sticky='w')
 
 # Crear botones individuales
 btn1 = tk.Button(root, text='1', padx=20, pady=20, font=('Arial', 18), command=lambda: press_button(1))
@@ -146,7 +187,7 @@ btn_por = tk.Button(root, text='%', padx=20, pady=20, font=('Arial', 18), comman
 btn_raiz = tk.Button(root, text='√', padx=20, pady=20, font=('Arial', 18), command=calculate_sqrt)
 btn_fact = tk.Button(root, text='n!', padx=20, pady=20, font=('Arial', 18), command=calculate_factorial)
 btn_arri = tk.Button(root, text='^', padx=20, pady=20, font=('Arial', 18), command=lambda: press_button('**'))
-btn_back = tk.Button(root, text='←', padx=20, pady=20, font=('Arial', 18))
+btn_back = tk.Button(root, text='←', padx=20, pady=20, font=('Arial', 18), command=lambda: backspace)
 btn_abs = tk.Button(root, text='ABS', padx=20, pady=20, font=('Arial', 18), command=calculate_abs)
 btn_deci = tk.Button(root, text='.', padx=20, pady=20, font=('Arial', 18))
 
